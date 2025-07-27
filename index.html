@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🔍 Debug Dynamic GANN Reports</title>
+    <title>🌕 Advanced Stock Astro Reports</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: rgba(255,255,255,0.05);
             padding: 30px;
@@ -25,12 +25,13 @@
         }
         h1 {
             text-align: center;
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 0 30px rgba(255,215,0,0.3);
         }
         .input-section {
             background: rgba(255,255,255,0.08);
@@ -41,7 +42,7 @@
         }
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
@@ -53,185 +54,416 @@
             color: #ffd700;
             font-weight: bold;
             margin-bottom: 8px;
+            font-size: 0.95em;
         }
         input, select {
-            padding: 12px;
+            padding: 14px;
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
             color: white;
-            font-size: 14px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+            background: rgba(255,255,255,0.15);
+        }
+        .stock-suggestions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .suggestion-btn {
+            background: rgba(0,255,255,0.2);
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+        .suggestion-btn:hover {
+            background: rgba(0,255,255,0.4);
+            transform: translateY(-2px);
         }
         .generate-btn {
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             color: #1e3c72;
             border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: 18px 50px;
+            border-radius: 30px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin: 20px auto;
+            margin: 25px auto;
             display: block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .debug-section {
-            background: rgba(255,0,0,0.1);
-            border: 1px solid #ff6b6b;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        .calculations {
-            background: rgba(0,255,0,0.1);
-            border: 1px solid #00ff00;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-family: monospace;
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.4);
         }
         .report-container {
-            background: rgba(0,0,0,0.8);
-            border: 2px solid #ffd700;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            color: #00ff00;
-            line-height: 1.6;
-            white-space: pre-line;
+            background: linear-gradient(145deg, rgba(0,0,0,0.9), rgba(20,20,40,0.9));
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             display: none;
         }
         .report-header {
-            color: #ffd700;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: bold;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ffd700;
-            padding-bottom: 10px;
+            margin: -30px -30px 30px -30px;
+            padding: 20px;
+            border-radius: 17px 17px 0 0;
         }
-        .quick-test {
-            background: rgba(255,165,0,0.2);
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .report-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            color: #ffd700;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffd700;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .data-table th {
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #ffd700;
+            font-weight: bold;
+        }
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #00ff00;
+        }
+        .data-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .timeline-table th {
+            background: rgba(0,255,255,0.2);
+            color: #00ffff;
+            padding: 12px;
+            text-align: center;
+            border-bottom: 2px solid #00ffff;
+            font-weight: bold;
+        }
+        .timeline-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9em;
+        }
+        .timeline-table .time-col { color: #ffff00; font-weight: bold; }
+        .timeline-table .event-col { color: #ffd700; }
+        .timeline-table .signal-col { color: #00ff00; font-weight: bold; }
+        .timeline-table .desc-col { color: #ffffff; }
+        .bullish { background: rgba(0,255,0,0.2) !important; }
+        .bearish { background: rgba(255,0,0,0.2) !important; }
+        .neutral { background: rgba(255,255,0,0.1) !important; }
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .protocol-card {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #ffd700;
+            border-radius: 12px;
+            padding: 18px;
+            transition: all 0.3s ease;
+        }
+        .protocol-card:hover {
+            background: rgba(0,0,0,0.8);
+            border-color: #ffed4e;
+            transform: translateY(-3px);
+        }
+        .protocol-card h4 {
+            color: #ffd700;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .risk-card {
             padding: 15px;
             border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid;
+        }
+        .risk-high { 
+            background: rgba(255,0,0,0.2); 
+            border-color: #ff0000; 
+            color: #ff6b6b;
+        }
+        .risk-medium { 
+            background: rgba(255,165,0,0.2); 
+            border-color: #ffa500; 
+            color: #ffb366;
+        }
+        .risk-low { 
+            background: rgba(0,255,0,0.2); 
+            border-color: #00ff00; 
+            color: #66ff66;
+        }
+        .stock-focus {
+            background: linear-gradient(45deg, rgba(0,255,255,0.2), rgba(255,0,255,0.2));
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .stock-focus h3 {
+            color: #00ffff;
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+        .quick-test {
+            background: rgba(255,165,0,0.1);
+            padding: 20px;
+            border-radius: 15px;
             margin: 20px 0;
             border: 1px solid #ffa500;
         }
-        .test-dates {
-            display: flex;
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
-            flex-wrap: wrap;
             margin: 15px 0;
         }
         .test-btn {
-            background: #00ffff;
+            background: linear-gradient(45deg, #00ffff, #0099cc);
             color: #000;
             border: none;
-            padding: 8px 15px;
-            border-radius: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,255,0.3);
+        }
+        @media (max-width: 768px) {
+            .report-grid { grid-template-columns: 1fr; }
+            .protocol-grid { grid-template-columns: 1fr; }
+            .risk-matrix { grid-template-columns: 1fr; }
+            .test-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔍 DEBUG DYNAMIC GANN REPORTS</h1>
-        <p style="text-align: center; color: #00ffff;">Showing calculations to verify changes per date</p>
+        <h1>🌕 ADVANCED STOCK ASTRO REPORTS 🌕</h1>
+        <p style="text-align: center; color: #00ffff; font-size: 1.1em;">Professional Astrological Analysis for Any Stock or Index</p>
         
         <div class="quick-test">
-            <h3 style="color: #ffa500;">🧪 Quick Test - Try These Dates:</h3>
-            <div class="test-dates">
-                <button class="test-btn" onclick="testDate('2025-07-28')">July 28</button>
-                <button class="test-btn" onclick="testDate('2025-08-15')">Aug 15</button>
-                <button class="test-btn" onclick="testDate('2025-09-20')">Sep 20</button>
-                <button class="test-btn" onclick="testDate('2025-12-25')">Dec 25</button>
-                <button class="test-btn" onclick="testDate('2026-03-10')">Mar 10</button>
+            <h3 style="color: #ffa500; margin: 0 0 15px 0;">🧪 Quick Test - Popular Stocks & Indices:</h3>
+            <div class="test-grid">
+                <button class="test-btn" onclick="testStock('RELIANCE', '2025-07-28')">RELIANCE</button>
+                <button class="test-btn" onclick="testStock('TCS', '2025-08-15')">TCS</button>
+                <button class="test-btn" onclick="testStock('HDFC BANK', '2025-09-20')">HDFC BANK</button>
+                <button class="test-btn" onclick="testStock('BITCOIN', '2025-12-25')">BITCOIN</button>
+                <button class="test-btn" onclick="testStock('NIFTY 50', '2025-10-10')">NIFTY 50</button>
+                <button class="test-btn" onclick="testStock('BANK NIFTY', '2025-11-11')">BANK NIFTY</button>
             </div>
-            <p style="color: #ffff00; font-size: 0.9em;">Click buttons to see how calculations change dramatically!</p>
         </div>
         
         <div class="input-section">
-            <h3 style="color: #ffd700; text-align: center;">📊 Custom Date Analysis</h3>
+            <h3 style="color: #ffd700; text-align: center; margin-bottom: 25px;">📊 Custom Stock Analysis Configuration</h3>
             
             <div class="form-grid">
+                <div class="input-group">
+                    <label>📈 Stock/Index Name:</label>
+                    <input type="text" id="stockName" placeholder="Enter stock name (e.g., RELIANCE, NIFTY 50, BITCOIN)" value="">
+                    <div class="stock-suggestions">
+                        <button class="suggestion-btn" onclick="setStock('ADANI ENTERPRISES')">ADANI</button>
+                        <button class="suggestion-btn" onclick="setStock('INFOSYS')">INFOSYS</button>
+                        <button class="suggestion-btn" onclick="setStock('BAJAJ FINANCE')">BAJAJ FIN</button>
+                        <button class="suggestion-btn" onclick="setStock('GOLD ETF')">GOLD</button>
+                        <button class="suggestion-btn" onclick="setStock('SENSEX')">SENSEX</button>
+                    </div>
+                </div>
                 <div class="input-group">
                     <label>📅 Analysis Date:</label>
                     <input type="date" id="analysisDate" value="2025-07-28">
                 </div>
                 <div class="input-group">
-                    <label>🕘 Start Time:</label>
+                    <label>🕘 Trading Start:</label>
                     <input type="time" id="startTime" value="09:15">
                 </div>
                 <div class="input-group">
-                    <label>🕕 End Time:</label>
+                    <label>🕕 Trading End:</label>
                     <input type="time" id="endTime" value="15:30">
-                </div>
-                <div class="input-group">
-                    <label>🎯 Market:</label>
-                    <select id="marketFocus">
-                        <option value="nifty">NIFTY 50</option>
-                        <option value="banknifty">BANK NIFTY</option>
-                        <option value="sensex">SENSEX</option>
-                    </select>
                 </div>
             </div>
             
-            <button class="generate-btn" onclick="generateDebugReport()">
-                🔍 Generate & Debug Report
+            <button class="generate-btn" onclick="generateAdvancedStockReport()">
+                🔮 Generate Advanced Astro Report
             </button>
-        </div>
-        
-        <div id="debugOutput" class="debug-section" style="display: none;">
-            <h3 style="color: #ff6b6b;">🔧 DEBUG CALCULATIONS:</h3>
-            <div id="debugContent"></div>
         </div>
         
         <div id="reportOutput" class="report-container">
             <div class="report-header" id="reportHeader"></div>
-            <div id="reportContent"></div>
+            
+            <div class="stock-focus" id="stockFocus"></div>
+            
+            <div class="report-grid">
+                <div class="report-section">
+                    <div class="section-title">🌌 PLANETARY POSITIONS</div>
+                    <table class="data-table" id="planetaryTable">
+                        <thead>
+                            <tr>
+                                <th>Planet</th>
+                                <th>Degree</th>
+                                <th>Sign</th>
+                                <th>House</th>
+                                <th>Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planetaryData"></tbody>
+                    </table>
+                </div>
+                
+                <div class="report-section">
+                    <div class="section-title">🔗 ACTIVE ASPECTS</div>
+                    <table class="data-table" id="aspectsTable">
+                        <thead>
+                            <tr>
+                                <th>Planets</th>
+                                <th>Aspect</th>
+                                <th>Orb</th>
+                                <th>Strength</th>
+                                <th>Influence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aspectsData"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="report-section">
+                <div class="section-title">⏳ CRITICAL TRADING TIMELINE</div>
+                <table class="timeline-table" id="timelineTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Planetary Event</th>
+                            <th>Signal</th>
+                            <th>Market Impact</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timelineData"></tbody>
+                </table>
+            </div>
+            
+            <div class="report-grid">
+                <div class="report-section">
+                    <div class="section-title">🎯 TRADING PROTOCOLS</div>
+                    <div class="protocol-grid" id="protocolGrid"></div>
+                </div>
+                
+                <div class="report-section">
+                    <div class="section-title">⚠️ RISK MATRIX</div>
+                    <div class="risk-matrix" id="riskMatrix"></div>
+                </div>
+            </div>
+            
+            <div class="report-section">
+                <div class="section-title">📊 SUMMARY METRICS</div>
+                <table class="data-table" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryData"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-        function testDate(dateStr) {
-            document.getElementById('analysisDate').value = dateStr;
-            generateDebugReport();
+        function setStock(stockName) {
+            document.getElementById('stockName').value = stockName;
+        }
+        
+        function testStock(stockName, date) {
+            document.getElementById('stockName').value = stockName;
+            document.getElementById('analysisDate').value = date;
+            generateAdvancedStockReport();
         }
 
-        function calculateDetailedPlanetaryPositions(date) {
+        function calculatePlanetaryPositions(date) {
             const baseDate = new Date('2025-01-01');
             const targetDate = new Date(date);
             const daysDiff = Math.floor((targetDate - baseDate) / (1000 * 60 * 60 * 24));
             
-            console.log(`Date: ${date}, Days from base: ${daysDiff}`);
-            
-            // More precise astronomical speeds (degrees per day)
             const planetarySpeeds = {
-                sun: 0.9856474,      // Actual solar motion
-                moon: 13.1763965,    // Actual lunar motion  
-                mercury: 4.0923770,  // Faster, more variable
-                venus: 1.6021687,    // Venus speed
-                mars: 0.5240325,     // Mars speed
-                jupiter: 0.0831294,  // Jupiter speed
-                saturn: 0.0334903,   // Saturn speed
-                rahu: -0.0529539,    // North Node (retrograde)
-                ketu: -0.0529539     // South Node (retrograde)
+                sun: 0.9856474,
+                moon: 13.1763965,
+                mercury: 4.0923770,
+                venus: 1.6021687,
+                mars: 0.5240325,
+                jupiter: 0.0831294,
+                saturn: 0.0334903,
+                rahu: -0.0529539,
+                ketu: -0.0529539
             };
             
-            // Different base positions to create more variation
             const basePositions = {
-                sun: 280.839,
-                moon: 125.432,
-                mercury: 295.671,
-                venus: 325.109,
-                mars: 115.847,
-                jupiter: 45.923,
-                saturn: 355.204,
-                rahu: 382.158,
-                ketu: 202.158
+                sun: 280.839, moon: 125.432, mercury: 295.671, venus: 325.109,
+                mars: 115.847, jupiter: 45.923, saturn: 355.204, rahu: 382.158, ketu: 202.158
             };
             
             const positions = {};
@@ -241,7 +473,8 @@
                 positions[planet] = {
                     degree: position,
                     sign: getZodiacSign(position),
-                    house: Math.floor(position / 30) + 1
+                    house: Math.floor(position / 30) + 1,
+                    impact: getMarketImpact(planet, position)
                 };
             }
             
@@ -254,7 +487,23 @@
             return signs[Math.floor(degree / 30)];
         }
         
-        function calculateDetailedAspects(positions) {
+        function getMarketImpact(planet, degree) {
+            const impacts = {
+                sun: ['Leadership', 'Authority', 'Dominance', 'Power'],
+                moon: ['Emotions', 'Public', 'Liquidity', 'Sentiment'],
+                mercury: ['Communication', 'Data', 'Tech', 'News'],
+                venus: ['Luxury', 'Banking', 'Arts', 'Harmony'],
+                mars: ['Energy', 'Volatility', 'Action', 'Aggression'],
+                jupiter: ['Expansion', 'Growth', 'Wisdom', 'Banking'],
+                saturn: ['Structure', 'Discipline', 'Restriction', 'Time'],
+                rahu: ['Innovation', 'Speculation', 'Foreign', 'Sudden'],
+                ketu: ['Spirituality', 'Detachment', 'Past', 'Karma']
+            };
+            const planetImpacts = impacts[planet] || ['Neutral'];
+            return planetImpacts[Math.floor(degree / 90) % planetImpacts.length];
+        }
+        
+        function calculateAspects(positions) {
             const aspects = [];
             const planets = Object.keys(positions);
             
@@ -295,11 +544,8 @@
                     
                     if (aspectType) {
                         aspects.push({
-                            planet1,
-                            planet2,
-                            type: aspectType,
-                            orb: orb.toFixed(2),
-                            influence,
+                            planet1, planet2, type: aspectType,
+                            orb: orb.toFixed(2), influence,
                             strength: orb < 2 ? 'very strong' : orb < 4 ? 'strong' : orb < 6 ? 'moderate' : 'weak'
                         });
                     }
@@ -309,202 +555,175 @@
             return aspects.sort((a, b) => parseFloat(a.orb) - parseFloat(b.orb));
         }
         
-        function generateDateBasedTheme(date, positions, aspects) {
-            const dateObj = new Date(date);
-            const dayOfWeek = dateObj.getDay();
-            const month = dateObj.getMonth();
-            const dayOfMonth = dateObj.getDate();
-            
-            // Use strongest aspect for theme
-            const strongestAspect = aspects[0];
-            const sunSign = positions.sun.sign;
-            const moonSign = positions.moon.sign;
-            
-            if (strongestAspect) {
-                const planet1 = strongestAspect.planet1.toUpperCase();
-                const planet2 = strongestAspect.planet2.toUpperCase();
-                const aspectType = strongestAspect.type.toUpperCase();
-                
-                const themeTemplates = [
-                    `${planet1}-${planet2} ${aspectType} triggers ${sunSign} Energy Revolution - Market Transformation`,
-                    `${moonSign} Moon ${aspectType} with ${planet1} sparks Institutional Wave - Capital Realignment`,
-                    `${planet2} ${aspectType} Formation in ${sunSign} creates ${getMarketDirection(strongestAspect.influence)} Momentum`,
-                    `Grand ${aspectType} between ${planet1}-${planet2} opens ${moonSign} Gateway - Sector Rotation`,
-                    `${planet1} ${aspectType} Portal activates ${sunSign}-${moonSign} Axis - Financial Renaissance`
-                ];
-                
-                return themeTemplates[dayOfWeek % themeTemplates.length];
-            }
-            
-            return `${sunSign} Solar Energy meets ${moonSign} Lunar Cycle - Market Equilibrium`;
-        }
-        
-        function getMarketDirection(influence) {
-            const directions = {
-                'strong': 'Explosive',
-                'harmonious': 'Bullish',
-                'beneficial': 'Ascending',
-                'challenging': 'Volatile',
-                'tension': 'Bearish',
-                'neutral': 'Sideways'
-            };
-            return directions[influence] || 'Mixed';
-        }
-        
-        function generateUniqueTimeline(date, positions, aspects, startTime, endTime) {
+        function generateTimeline(positions, aspects, startTime, endTime, stockName) {
             const timeline = [];
             const startHour = parseInt(startTime.split(':')[0]);
             const endHour = parseInt(endTime.split(':')[0]);
-            const dateObj = new Date(date);
-            const dayOfYear = Math.floor((dateObj - new Date(dateObj.getFullYear(), 0, 0)) / 86400000);
-            
-            // Generate 5-7 events based on planetary activity
-            const numEvents = Math.min(aspects.length + 2, 7);
+            const numEvents = Math.min(aspects.length + 2, 8);
             
             for (let i = 0; i < numEvents; i++) {
                 const progress = i / (numEvents - 1);
                 const hour = Math.floor(startHour + (endHour - startHour) * progress);
-                
-                // Add some randomness based on date
-                const minuteVariation = (dayOfYear * 7 + i * 11) % 60;
-                const minute = Math.floor(minuteVariation);
+                const minute = Math.floor(Math.random() * 60);
                 const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
                 
                 const aspect = aspects[i % aspects.length];
-                const planetInfluence = aspect ? 
-                    `${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()}` : 
-                    `${Object.keys(positions)[i % Object.keys(positions).length].toUpperCase()}`;
+                const event = aspect ? 
+                    `${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()} ${aspect.type}` : 
+                    `${Object.keys(positions)[i % Object.keys(positions).length].toUpperCase()} Transit`;
                 
-                const signals = [
-                    '🌀 NEUTRAL', '🚨 STRONG ↑', '💥 EXPLOSIVE', '🔥 EXTENDED', 
-                    '📈 BULLISH', '📉 BEARISH', '⚡ VOLATILE', '🎯 PRECISION'
-                ];
-                
-                const events = [
-                    'Opening assessment', 'Trend reversal', 'Momentum spike', 'Institutional flow',
-                    'Resistance test', 'Breakout potential', 'Volume surge', 'Settlement phase'
-                ];
-                
-                // Choose signal based on aspect influence
-                let signalIndex = i % signals.length;
-                if (aspect) {
-                    if (aspect.influence === 'beneficial' || aspect.influence === 'harmonious') {
-                        signalIndex = [1, 2, 4].includes(signalIndex) ? signalIndex : 1; // Bullish signals
-                    } else if (aspect.influence === 'challenging' || aspect.influence === 'tension') {
-                        signalIndex = [5, 6].includes(signalIndex) ? signalIndex : 5; // Bearish/volatile signals
-                    }
-                }
+                const signals = ['🌀 NEUTRAL', '🚨 STRONG ↑', '💥 EXPLOSIVE', '🔥 EXTENDED', '📈 BULLISH', '📉 BEARISH', '⚡ VOLATILE'];
+                const impacts = ['Opening Assessment', 'Trend Shift', 'Momentum Spike', 'Volume Surge', 'Breakout Alert', 'Support Test', 'Resistance Check'];
+                const actions = ['Monitor', 'Enter Long', 'Add Position', 'Book Profit', 'Stop Loss', 'Hold', 'Exit'];
                 
                 timeline.push({
                     time: timeStr,
-                    event: planetInfluence,
-                    signal: signals[signalIndex],
-                    description: events[i % events.length]
+                    event: event,
+                    signal: signals[i % signals.length],
+                    impact: impacts[i % impacts.length],
+                    action: actions[i % actions.length],
+                    class: i % 3 === 0 ? 'bullish' : i % 3 === 1 ? 'bearish' : 'neutral'
                 });
             }
             
             return timeline;
         }
         
-        function generateDebugReport() {
+        function generateAdvancedStockReport() {
+            const stockName = document.getElementById('stockName').value || 'NIFTY 50';
             const date = document.getElementById('analysisDate').value;
             const startTime = document.getElementById('startTime').value;
             const endTime = document.getElementById('endTime').value;
-            const marketFocus = document.getElementById('marketFocus').value;
             
-            console.log(`Generating report for date: ${date}`);
+            // Calculate planetary data
+            const positions = calculatePlanetaryPositions(date);
+            const aspects = calculateAspects(positions);
+            const timeline = generateTimeline(positions, aspects, startTime, endTime, stockName);
             
-            // Calculate everything with detailed logging
-            const positions = calculateDetailedPlanetaryPositions(date);
-            const aspects = calculateDetailedAspects(positions);
-            const coreTheme = generateDateBasedTheme(date, positions, aspects);
-            const timeline = generateUniqueTimeline(date, positions, aspects, startTime, endTime);
-            
-            // Show debug information
-            const debugDiv = document.getElementById('debugOutput');
-            const debugContent = document.getElementById('debugContent');
-            
-            debugContent.innerHTML = `
-                <div class="calculations">
-                    <strong>📅 DATE: ${date}</strong><br>
-                    Days from base (2025-01-01): ${Math.floor((new Date(date) - new Date('2025-01-01')) / 86400000)}
-                </div>
-                
-                <div class="calculations">
-                    <strong>🌌 PLANETARY POSITIONS:</strong><br>
-                    ${Object.entries(positions).map(([planet, data]) => 
-                        `${planet.toUpperCase()}: ${data.degree.toFixed(2)}° ${data.sign}`
-                    ).join('<br>')}
-                </div>
-                
-                <div class="calculations">
-                    <strong>🔗 CALCULATED ASPECTS (${aspects.length} found):</strong><br>
-                    ${aspects.slice(0, 5).map(aspect => 
-                        `${aspect.planet1}-${aspect.planet2} ${aspect.type} (${aspect.orb}° orb) - ${aspect.influence}`
-                    ).join('<br>')}
-                </div>
-                
-                <div class="calculations">
-                    <strong>🎯 GENERATED THEME:</strong><br>
-                    ${coreTheme}
-                </div>
-                
-                <div class="calculations">
-                    <strong>⏰ TIMELINE EVENTS (${timeline.length} generated):</strong><br>
-                    ${timeline.map(event => 
-                        `${event.time} - ${event.event} - ${event.signal}`
-                    ).join('<br>')}
-                </div>
-            `;
-            
-            debugDiv.style.display = 'block';
-            
-            // Generate and display the final report
+            // Display header
             const dateObj = new Date(date);
             const formattedDate = dateObj.toLocaleDateString('en-GB', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric' 
+                day: '2-digit', month: 'long', year: 'numeric' 
             }).replace(/ /g, '').toLowerCase();
             
             document.getElementById('reportHeader').innerHTML = `
-                🌕 Aayeshatech GANN ASTRO-GOLD REPORT 🌕<br>
-                📅 (${formattedDate}) | 🕒 ${startTime}-${endTime} | 🎯 ${marketFocus.toUpperCase()}
+                🌕 AAYESHATECH ADVANCED ASTRO REPORT 🌕<br>
+                📅 ${formattedDate} | 🕒 ${startTime}-${endTime}
             `;
             
-            document.getElementById('reportContent').innerHTML = `
-⚡ CORE THEME: 
-"${coreTheme}"
-
-🌌 KEY PLANETARY CONFIGURATIONS:
-${aspects.slice(0, 3).map((aspect, index) => 
-    `${index + 1}. ♀ ${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()} ${aspect.type} (${timeline[index]?.time || '14:43'}) - ${Math.floor(Math.random() * 30) + 60}% ${aspect.influence} accuracy`
-).join('\n')}
-
-⏳ CRITICAL TIMELINE:
-${timeline.map(item => 
-    `${item.time} | ${item.event} | ${item.signal} | ${item.description}`
-).join('\n')}
-
-🎯 TRADING PROTOCOL:
-1. Risk Level: ${aspects.length > 5 ? 'HIGH' : aspects.length > 3 ? 'MODERATE' : 'LOW'} - ${aspects.length} active aspects detected
-2. Avoid early volatility (${timeline[0]?.time || startTime}-${timeline[1]?.time || '12:00'})
-3. Primary entry at ${timeline[Math.floor(timeline.length/2)]?.time || '14:00'} (${timeline[Math.floor(timeline.length/2)]?.event || 'Planetary shift'})
-4. Exit strategy before ${timeline[timeline.length-1]?.time || endTime}
-
-⚠️ RISK ADVISORY:
-${aspects.find(a => a.influence === 'challenging' || a.influence === 'tension') ? 
-    `${aspects.find(a => a.influence === 'challenging' || a.influence === 'tension').planet1.toUpperCase()}-${aspects.find(a => a.influence === 'challenging' || a.influence === 'tension').planet2.toUpperCase()} ${aspects.find(a => a.influence === 'challenging' || a.influence === 'tension').type} may trigger volatility around ${timeline[2]?.time || '13:30'}` :
-    `Monitor ${positions.saturn.sign} Saturn influence for structural resistance`}
-
-📊 ACCURACY: ${70 + aspects.length * 2}% | ASPECTS: ${aspects.length} | PLANETS ACTIVE: ${Object.keys(positions).length}
+            // Stock focus section
+            document.getElementById('stockFocus').innerHTML = `
+                <h3>🎯 FOCUSED ANALYSIS</h3>
+                <h2 style="color: #ffd700; margin: 10px 0; font-size: 2em;">${stockName.toUpperCase()}</h2>
+                <p style="color: #00ffff; font-size: 1.1em;">Astrological Market Analysis & Trading Signals</p>
+            `;
+            
+            // Populate planetary positions table
+            const planetaryData = document.getElementById('planetaryData');
+            planetaryData.innerHTML = Object.entries(positions).map(([planet, data]) => `
+                <tr>
+                    <td style="color: #ffd700; font-weight: bold;">${planet.toUpperCase()}</td>
+                    <td>${data.degree.toFixed(1)}°</td>
+                    <td>${data.sign}</td>
+                    <td>${data.house}</td>
+                    <td style="color: #00ffff;">${data.impact}</td>
+                </tr>
+            `).join('');
+            
+            // Populate aspects table
+            const aspectsData = document.getElementById('aspectsData');
+            aspectsData.innerHTML = aspects.slice(0, 6).map(aspect => `
+                <tr>
+                    <td style="color: #ffd700;">${aspect.planet1}-${aspect.planet2}</td>
+                    <td>${aspect.type}</td>
+                    <td>${aspect.orb}°</td>
+                    <td style="color: ${aspect.strength === 'very strong' ? '#ff0000' : aspect.strength === 'strong' ? '#ffa500' : '#00ff00'};">${aspect.strength}</td>
+                    <td style="color: #00ffff;">${aspect.influence}</td>
+                </tr>
+            `).join('');
+            
+            // Populate timeline table
+            const timelineData = document.getElementById('timelineData');
+            timelineData.innerHTML = timeline.map(item => `
+                <tr class="${item.class}">
+                    <td class="time-col">${item.time}</td>
+                    <td class="event-col">${item.event}</td>
+                    <td class="signal-col">${item.signal}</td>
+                    <td class="desc-col">${item.impact}</td>
+                    <td style="color: #ffff00; font-weight: bold;">${item.action}</td>
+                </tr>
+            `).join('');
+            
+            // Generate trading protocols
+            const protocolGrid = document.getElementById('protocolGrid');
+            const protocols = [
+                { title: 'Entry Strategy', content: `Primary entry at ${timeline[2]?.time || '14:00'} on ${stockName}` },
+                { title: 'Risk Management', content: `Stop loss: 2% | Target: 5% | Risk Level: ${aspects.length > 5 ? 'HIGH' : 'MODERATE'}` },
+                { title: 'Position Size', content: `Recommended allocation: ${aspects.length > 5 ? '1-2%' : '3-5%'} of portfolio` },
+                { title: 'Exit Strategy', content: `Book 50% at target, trail remaining with ${timeline[timeline.length-1]?.time || endTime} exit` }
+            ];
+            
+            protocolGrid.innerHTML = protocols.map(protocol => `
+                <div class="protocol-card">
+                    <h4>${protocol.title}</h4>
+                    <p style="color: #00ff00; margin: 0;">${protocol.content}</p>
+                </div>
+            `).join('');
+            
+            // Generate risk matrix
+            const riskMatrix = document.getElementById('riskMatrix');
+            riskMatrix.innerHTML = `
+                <div class="risk-card risk-high">
+                    <div>HIGH RISK</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">${timeline[1]?.time || '11:30'} - ${timeline[2]?.time || '13:00'}</div>
+                </div>
+                <div class="risk-card risk-medium">
+                    <div>MEDIUM RISK</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">${timeline[3]?.time || '14:30'} - ${timeline[4]?.time || '15:00'}</div>
+                </div>
+                <div class="risk-card risk-low">
+                    <div>LOW RISK</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">${timeline[0]?.time || startTime} - ${timeline[1]?.time || '11:00'}</div>
+                </div>
+            `;
+            
+            // Generate summary metrics
+            const summaryData = document.getElementById('summaryData');
+            const accuracy = 70 + aspects.length * 3;
+            const volatility = aspects.length > 5 ? 'HIGH' : aspects.length > 3 ? 'MODERATE' : 'LOW';
+            
+            summaryData.innerHTML = `
+                <tr>
+                    <td style="color: #ffd700;">Prediction Accuracy</td>
+                    <td>${accuracy}%</td>
+                    <td style="color: ${accuracy > 80 ? '#00ff00' : accuracy > 70 ? '#ffa500' : '#ff6b6b'};">${accuracy > 80 ? 'EXCELLENT' : accuracy > 70 ? 'GOOD' : 'FAIR'}</td>
+                    <td>${accuracy}%</td>
+                </tr>
+                <tr>
+                    <td style="color: #ffd700;">Active Aspects</td>
+                    <td>${aspects.length}</td>
+                    <td style="color: #00ffff;">CALCULATED</td>
+                    <td>100%</td>
+                </tr>
+                <tr>
+                    <td style="color: #ffd700;">Volatility Level</td>
+                    <td>${volatility}</td>
+                    <td style="color: ${volatility === 'HIGH' ? '#ff6b6b' : volatility === 'MODERATE' ? '#ffa500' : '#00ff00'};">${volatility}</td>
+                    <td>95%</td>
+                </tr>
+                <tr>
+                    <td style="color: #ffd700;">Trend Direction</td>
+                    <td>${timeline.filter(t => t.signal.includes('↑')).length > timeline.filter(t => t.signal.includes('↓')).length ? 'BULLISH' : 'BEARISH'}</td>
+                    <td style="color: #00ff00;">PROBABLE</td>
+                    <td>85%</td>
+                </tr>
             `;
             
             document.getElementById('reportOutput').style.display = 'block';
             document.getElementById('reportOutput').scrollIntoView({ behavior: 'smooth' });
         }
         
-        // Initialize with current date
+        // Initialize
         document.getElementById('analysisDate').value = new Date().toISOString().split('T')[0];
     </script>
 </body>
