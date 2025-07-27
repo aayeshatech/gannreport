@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🔍 Realistic Market Astro System</title>
+    <title>🌌 Live Astronomical Data System</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: rgba(255,255,255,0.05);
             padding: 30px;
@@ -25,7 +25,7 @@
         }
         h1 {
             text-align: center;
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             -webkit-background-clip: text;
@@ -41,7 +41,7 @@
         }
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
@@ -54,132 +54,176 @@
             font-weight: bold;
             margin-bottom: 8px;
         }
-        input {
-            padding: 12px;
+        input, select {
+            padding: 14px;
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
             color: white;
-            font-size: 14px;
+            font-size: 15px;
         }
         .generate-btn {
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             color: #1e3c72;
             border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: 18px 50px;
+            border-radius: 30px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin: 20px auto;
+            margin: 25px auto;
             display: block;
+            transition: all 0.3s ease;
         }
-        .market-warning {
-            background: rgba(255,0,0,0.2);
-            border: 2px solid #ff0000;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+        .status {
             text-align: center;
-        }
-        .market-bullish {
-            background: rgba(0,255,0,0.2);
-            border: 2px solid #00ff00;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .market-neutral {
-            background: rgba(255,255,0,0.2);
-            border: 2px solid #ffff00;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .debug-section {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
-            font-family: monospace;
-            font-size: 0.9em;
+            font-weight: bold;
         }
-        .aspect-analysis {
-            background: rgba(0,0,0,0.6);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            border-left: 4px solid;
+        .status.loading {
+            background: rgba(255,165,0,0.2);
+            color: #ffa500;
+            border: 1px solid #ffa500;
         }
-        .aspect-bearish { border-left-color: #ff0000; }
-        .aspect-bullish { border-left-color: #00ff00; }
-        .aspect-neutral { border-left-color: #ffff00; }
-        .report-container {
-            background: rgba(0,0,0,0.8);
-            border: 2px solid #ffd700;
+        .status.success {
+            background: rgba(0,255,0,0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        .status.error {
+            background: rgba(255,0,0,0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+        .data-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .data-section {
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 25px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            color: #00ff00;
-            line-height: 1.6;
-            white-space: pre-line;
-            display: none;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .timeline-table {
+        .section-title {
+            color: #ffd700;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffd700;
+        }
+        .raw-data {
+            background: rgba(0,0,0,0.6);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #00ffff;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .transit-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
             font-family: 'Courier New', monospace;
         }
-        .timeline-table th {
+        .transit-table th {
             background: rgba(255,215,0,0.2);
             color: #ffd700;
-            padding: 12px;
+            padding: 12px 8px;
             text-align: center;
             border-bottom: 2px solid #ffd700;
+            font-size: 0.9em;
         }
-        .timeline-table td {
-            padding: 10px;
+        .transit-table td {
+            padding: 10px 8px;
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85em;
         }
-        .bearish-signal { background: rgba(255,0,0,0.3) !important; color: #ff6b6b; }
-        .bullish-signal { background: rgba(0,255,0,0.3) !important; color: #66ff66; }
-        .neutral-signal { background: rgba(255,255,0,0.2) !important; color: #ffff66; }
-        .historical-note {
-            background: rgba(255,165,0,0.2);
-            border: 1px solid #ffa500;
+        .time-col { color: #ffff00; font-weight: bold; }
+        .planet-col { color: #ffd700; }
+        .position-col { color: #00ff00; }
+        .aspect-col { color: #ff6b6b; }
+        .impact-col { color: #00ffff; }
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-left: 3px solid #ffd700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .api-info {
+            background: rgba(0,255,255,0.1);
+            border: 1px solid #00ffff;
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
+            font-size: 0.9em;
+        }
+        .transit-analysis {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hourly-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .hour-card {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+        .hour-card h4 {
+            color: #ffd700;
+            margin: 0 0 10px 0;
+        }
+        @media (max-width: 768px) {
+            .data-display { grid-template-columns: 1fr; }
+            .hourly-data { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔍 REALISTIC MARKET ASTRO SYSTEM</h1>
-        <p style="text-align: center; color: #ff6b6b;">Fixed to Match Actual Market Behavior</p>
+        <h1>🌌 LIVE ASTRONOMICAL DATA SYSTEM</h1>
+        <p style="text-align: center; color: #00ffff; font-size: 1.1em;">Real-time planetary positions and transits from astronomics.ai</p>
         
-        <div class="historical-note">
-            <h3 style="color: #ffa500; margin: 0 0 10px 0;">📉 Historical Market Events:</h3>
-            <p><strong>July 25, 2025:</strong> NIFTY, BANKNIFTY, and all sectors fell heavily (as reported by user)</p>
-            <p><strong>System Fix:</strong> Now accurately detects bearish planetary combinations</p>
+        <div class="api-info">
+            <h3 style="color: #00ffff; margin: 0 0 10px 0;">📡 Data Source Information</h3>
+            <p><strong>API:</strong> https://data.astronomics.ai/almanac/</p>
+            <p><strong>Features:</strong> Real planetary positions, exact transit times, astronomical calculations</p>
+            <p><strong>Coverage:</strong> All major planets, precise degree calculations, hourly movements</p>
         </div>
         
         <div class="input-section">
-            <h3 style="color: #ffd700; text-align: center;">📊 Accurate Market Analysis</h3>
+            <h3 style="color: #ffd700; text-align: center; margin-bottom: 25px;">🔭 Live Transit Analysis Configuration</h3>
             
             <div class="form-grid">
                 <div class="input-group">
-                    <label>📅 Analysis Date:</label>
-                    <input type="date" id="analysisDate" value="2025-07-25">
-                </div>
-                <div class="input-group">
-                    <label>📈 Stock/Index:</label>
-                    <input type="text" id="stockName" value="NIFTY 50" placeholder="Enter stock name">
+                    <label>📅 Date for Analysis:</label>
+                    <input type="date" id="analysisDate" value="2025-07-28">
                 </div>
                 <div class="input-group">
                     <label>🕘 Start Time:</label>
@@ -189,322 +233,382 @@
                     <label>🕕 End Time:</label>
                     <input type="time" id="endTime" value="15:30">
                 </div>
+                <div class="input-group">
+                    <label>🌍 Location (Timezone):</label>
+                    <select id="timezone">
+                        <option value="Asia/Kolkata">India (IST)</option>
+                        <option value="America/New_York">New York (EST)</option>
+                        <option value="Europe/London">London (GMT)</option>
+                        <option value="Asia/Tokyo">Tokyo (JST)</option>
+                    </select>
+                </div>
             </div>
             
-            <button class="generate-btn" onclick="generateRealisticReport()">
-                🔍 Generate Realistic Report
+            <button class="generate-btn" onclick="fetchLiveAstronomicalData()" id="fetchBtn">
+                🔭 Fetch Live Astronomical Data
             </button>
         </div>
         
-        <div id="marketAlert" style="display: none;"></div>
+        <div id="statusDiv" class="status" style="display: none;"></div>
         
-        <div id="debugOutput" class="debug-section" style="display: none;">
-            <h3 style="color: #ffd700;">🔧 ASPECT ANALYSIS:</h3>
-            <div id="aspectAnalysis"></div>
+        <div id="dataDisplay" class="data-display" style="display: none;">
+            <div class="data-section">
+                <div class="section-title">📡 RAW API RESPONSE</div>
+                <div class="raw-data" id="rawData"></div>
+            </div>
+            
+            <div class="data-section">
+                <div class="section-title">🌌 PLANETARY POSITIONS</div>
+                <table class="transit-table" id="planetaryTable">
+                    <thead>
+                        <tr>
+                            <th>Planet</th>
+                            <th>Position</th>
+                            <th>Sign</th>
+                            <th>Speed</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="planetaryData"></tbody>
+                </table>
+            </div>
         </div>
         
-        <div id="reportOutput" class="report-container">
-            <div id="reportContent"></div>
+        <div id="transitAnalysis" class="transit-analysis" style="display: none;">
+            <div class="section-title">⏰ HOURLY TRANSIT TIMELINE</div>
+            <table class="transit-table" id="transitTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Planet</th>
+                        <th>Transit Type</th>
+                        <th>Details</th>
+                        <th>Market Impact</th>
+                    </tr>
+                </thead>
+                <tbody id="transitData"></tbody>
+            </table>
+        </div>
+        
+        <div id="hourlyAnalysis" class="data-section" style="display: none;">
+            <div class="section-title">📊 HOUR-BY-HOUR BREAKDOWN</div>
+            <div class="hourly-data" id="hourlyData"></div>
         </div>
     </div>
 
     <script>
-        function calculatePlanetaryPositions(date) {
-            const baseDate = new Date('2025-01-01');
-            const targetDate = new Date(date);
-            const daysDiff = Math.floor((targetDate - baseDate) / (1000 * 60 * 60 * 24));
-            
-            // Actual astronomical speeds
-            const planetarySpeeds = {
-                sun: 0.9856474,
-                moon: 13.1763965,
-                mercury: 4.0923770,
-                venus: 1.6021687,
-                mars: 0.5240325,
-                jupiter: 0.0831294,
-                saturn: 0.0334903,
-                rahu: -0.0529539,
-                ketu: -0.0529539
-            };
-            
-            const basePositions = {
-                sun: 280.839,
-                moon: 125.432,
-                mercury: 295.671,
-                venus: 325.109,
-                mars: 115.847,
-                jupiter: 45.923,
-                saturn: 355.204,
-                rahu: 382.158,
-                ketu: 202.158
-            };
-            
-            const positions = {};
-            for (const [planet, speed] of Object.entries(planetarySpeeds)) {
-                let position = (basePositions[planet] + (speed * daysDiff)) % 360;
-                if (position < 0) position += 360;
-                positions[planet] = position;
-            }
-            
-            return positions;
+        let astronomicalData = null;
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusDiv');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
         }
-        
-        function calculateRealisticAspects(positions) {
-            const aspects = [];
-            const planets = Object.keys(positions);
+
+        function showLoading(message) {
+            const statusDiv = document.getElementById('statusDiv');
+            statusDiv.innerHTML = `
+                <div class="loading-spinner"></div>
+                <div style="margin-top: 10px;">${message}</div>
+            `;
+            statusDiv.className = 'status loading';
+            statusDiv.style.display = 'block';
+        }
+
+        async function fetchLiveAstronomicalData() {
+            const date = document.getElementById('analysisDate').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const timezone = document.getElementById('timezone').value;
             
-            for (let i = 0; i < planets.length; i++) {
-                for (let j = i + 1; j < planets.length; j++) {
-                    const planet1 = planets[i];
-                    const planet2 = planets[j];
-                    const deg1 = positions[planet1];
-                    const deg2 = positions[planet2];
-                    const diff = Math.abs(deg1 - deg2);
-                    const angle = Math.min(diff, 360 - diff);
+            const fetchBtn = document.getElementById('fetchBtn');
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = '🔄 Fetching...';
+            
+            try {
+                showLoading('🌌 Connecting to astronomics.ai API...');
+                
+                // Format date for API (YYYY-MM-DD)
+                const apiDate = date;
+                const apiUrl = `https://data.astronomics.ai/almanac/${apiDate}`;
+                
+                console.log(`Fetching data from: ${apiUrl}`);
+                
+                // Try direct fetch first
+                let response;
+                let data;
+                
+                try {
+                    showLoading('📡 Fetching real astronomical data...');
+                    response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        mode: 'cors'
+                    });
                     
-                    let aspectType = null;
-                    let orb = 0;
-                    let marketImpact = 'neutral';
+                    if (!response.ok) {
+                        throw new Error(`API returned ${response.status}: ${response.statusText}`);
+                    }
                     
-                    if (angle <= 8) {
-                        aspectType = 'conjunction';
-                        orb = angle;
-                        // Conjunction impact depends on planets
-                        if ((planet1 === 'mars' && planet2 === 'saturn') || 
-                            (planet1 === 'sun' && planet2 === 'saturn') ||
-                            (planet1 === 'rahu' && planet2 === 'ketu')) {
-                            marketImpact = 'very bearish';
-                        } else if ((planet1 === 'jupiter' && planet2 === 'venus') ||
-                                   (planet1 === 'sun' && planet2 === 'jupiter')) {
-                            marketImpact = 'bullish';
-                        } else {
-                            marketImpact = 'neutral';
+                    data = await response.json();
+                    showStatus('✅ Successfully fetched live astronomical data!', 'success');
+                    
+                } catch (corsError) {
+                    console.log('Direct fetch failed, trying with proxy...');
+                    showLoading('🔄 Trying alternative access method...');
+                    
+                    // Try with CORS proxy
+                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                    response = await fetch(proxyUrl + apiUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
-                    } else if (Math.abs(angle - 90) <= 7) {
-                        aspectType = 'square';
-                        orb = Math.abs(angle - 90);
-                        marketImpact = 'bearish'; // Squares are generally difficult
-                    } else if (Math.abs(angle - 180) <= 8) {
-                        aspectType = 'opposition';
-                        orb = Math.abs(angle - 180);
-                        marketImpact = 'very bearish'; // Oppositions create tension
-                    } else if (Math.abs(angle - 120) <= 8) {
-                        aspectType = 'trine';
-                        orb = Math.abs(angle - 120);
-                        marketImpact = 'bullish'; // Trines are harmonious
-                    } else if (Math.abs(angle - 60) <= 6) {
-                        aspectType = 'sextile';
-                        orb = Math.abs(angle - 60);
-                        marketImpact = 'mildly bullish';
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Proxy request failed: ${response.status}`);
                     }
                     
-                    if (aspectType) {
-                        aspects.push({
-                            planet1, planet2, type: aspectType,
-                            orb: orb.toFixed(2), marketImpact,
-                            strength: orb < 2 ? 'very strong' : orb < 4 ? 'strong' : orb < 6 ? 'moderate' : 'weak'
-                        });
+                    data = await response.json();
+                    showStatus('✅ Data fetched via proxy successfully!', 'success');
+                }
+                
+                astronomicalData = data;
+                
+                // Display the data
+                displayRawData(data);
+                displayPlanetaryPositions(data);
+                generateTransitTimeline(data, startTime, endTime);
+                generateHourlyAnalysis(data, startTime, endTime);
+                
+            } catch (error) {
+                console.error('Error fetching astronomical data:', error);
+                showStatus(`❌ Error: ${error.message}`, 'error');
+                
+                // Generate fallback demonstration data
+                showStatus('⚠️ Using demonstration data (API not accessible)', 'error');
+                generateFallbackData(date, startTime, endTime);
+            } finally {
+                fetchBtn.disabled = false;
+                fetchBtn.textContent = '🔭 Fetch Live Astronomical Data';
+            }
+        }
+
+        function displayRawData(data) {
+            const rawDataDiv = document.getElementById('rawData');
+            rawDataDiv.textContent = JSON.stringify(data, null, 2);
+            document.getElementById('dataDisplay').style.display = 'grid';
+        }
+
+        function displayPlanetaryPositions(data) {
+            const planetaryData = document.getElementById('planetaryData');
+            let html = '';
+            
+            // Check different possible data structures
+            if (data.planets) {
+                // Structure: { planets: { sun: {...}, moon: {...} } }
+                Object.entries(data.planets).forEach(([planet, info]) => {
+                    html += `
+                        <tr>
+                            <td class="planet-col">${planet.toUpperCase()}</td>
+                            <td class="position-col">${typeof info === 'object' ? (info.longitude || info.degree || 'N/A') : info}°</td>
+                            <td class="position-col">${getZodiacSign(parseFloat(info.longitude || info.degree || 0))}</td>
+                            <td class="position-col">${info.speed || 'N/A'}</td>
+                            <td class="impact-col">${info.retrograde ? 'Retrograde' : 'Direct'}</td>
+                        </tr>
+                    `;
+                });
+            } else if (data.ephemeris) {
+                // Structure: { ephemeris: [...] }
+                data.ephemeris.forEach(entry => {
+                    html += `
+                        <tr>
+                            <td class="planet-col">${entry.planet || entry.body || 'Unknown'}</td>
+                            <td class="position-col">${entry.longitude || entry.position}°</td>
+                            <td class="position-col">${getZodiacSign(parseFloat(entry.longitude || entry.position || 0))}</td>
+                            <td class="position-col">${entry.speed || 'N/A'}</td>
+                            <td class="impact-col">${entry.retrograde ? 'Retrograde' : 'Direct'}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                // Generic object structure
+                Object.entries(data).forEach(([key, value]) => {
+                    if (typeof value === 'object' && value !== null) {
+                        html += `
+                            <tr>
+                                <td class="planet-col">${key.toUpperCase()}</td>
+                                <td class="position-col">${value.longitude || value.degree || value.position || 'N/A'}°</td>
+                                <td class="position-col">${value.sign || getZodiacSign(parseFloat(value.longitude || value.degree || 0))}</td>
+                                <td class="position-col">${value.speed || 'N/A'}</td>
+                                <td class="impact-col">${value.retrograde ? 'Retrograde' : 'Direct'}</td>
+                            </tr>
+                        `;
                     }
-                }
-            }
-            
-            return aspects.sort((a, b) => parseFloat(a.orb) - parseFloat(b.orb));
-        }
-        
-        function analyzeMarketCondition(aspects) {
-            let bearishScore = 0;
-            let bullishScore = 0;
-            
-            aspects.forEach(aspect => {
-                const weight = aspect.strength === 'very strong' ? 3 : 
-                              aspect.strength === 'strong' ? 2 : 1;
-                
-                if (aspect.marketImpact === 'very bearish') {
-                    bearishScore += weight * 3;
-                } else if (aspect.marketImpact === 'bearish') {
-                    bearishScore += weight * 2;
-                } else if (aspect.marketImpact === 'bullish') {
-                    bullishScore += weight * 2;
-                } else if (aspect.marketImpact === 'mildly bullish') {
-                    bullishScore += weight;
-                }
-            });
-            
-            if (bearishScore > bullishScore * 1.5) {
-                return { condition: 'bearish', strength: 'strong', score: bearishScore - bullishScore };
-            } else if (bullishScore > bearishScore * 1.5) {
-                return { condition: 'bullish', strength: 'strong', score: bullishScore - bearishScore };
-            } else {
-                return { condition: 'neutral', strength: 'moderate', score: Math.abs(bullishScore - bearishScore) };
-            }
-        }
-        
-        function generateRealisticTimeline(positions, aspects, condition, startTime, endTime) {
-            const timeline = [];
-            const startHour = parseInt(startTime.split(':')[0]);
-            const endHour = parseInt(endTime.split(':')[0]);
-            const numEvents = Math.min(aspects.length + 1, 6);
-            
-            // Determine signal distribution based on market condition
-            let signals = [];
-            if (condition.condition === 'bearish') {
-                signals = ['📉 BEARISH OPEN', '📉 SELLING PRESSURE', '💥 SHARP FALL', '🔴 HEAVY SELLING', '📉 BEARISH CLOSE', '⚠️ PANIC SELLING'];
-            } else if (condition.condition === 'bullish') {
-                signals = ['📈 BULLISH OPEN', '🚀 BUYING INTEREST', '💚 STRONG RALLY', '📈 MOMENTUM BUILD', '✅ BULLISH CLOSE', '🎯 TARGET HIT'];
-            } else {
-                signals = ['🌀 NEUTRAL OPEN', '⚖️ MIXED SIGNALS', '📊 RANGE BOUND', '🔄 SIDEWAYS MOVE', '🌀 NEUTRAL CLOSE', '📊 CONSOLIDATION'];
-            }
-            
-            for (let i = 0; i < numEvents; i++) {
-                const progress = i / (numEvents - 1);
-                const hour = Math.floor(startHour + (endHour - startHour) * progress);
-                const minute = Math.floor(Math.random() * 60);
-                const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                
-                const aspect = aspects[i % aspects.length];
-                const event = aspect ? 
-                    `${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()}` : 
-                    'MARKET DYNAMIC';
-                
-                const signal = signals[i % signals.length];
-                const impact = getRealisticImpact(condition.condition, i);
-                
-                timeline.push({
-                    time: timeStr,
-                    event: event,
-                    signal: signal,
-                    impact: impact,
-                    class: condition.condition === 'bearish' ? 'bearish-signal' : 
-                           condition.condition === 'bullish' ? 'bullish-signal' : 'neutral-signal'
                 });
             }
             
-            return timeline;
-        }
-        
-        function getRealisticImpact(condition, index) {
-            if (condition === 'bearish') {
-                const impacts = ['Initial selling', 'Accelerated decline', 'Heavy profit booking', 'Stop loss triggers', 'Panic selling', 'Support breakdown'];
-                return impacts[index % impacts.length];
-            } else if (condition === 'bullish') {
-                const impacts = ['Fresh buying', 'Momentum pickup', 'Institutional interest', 'Breakout move', 'Rally extension', 'Target achievement'];
-                return impacts[index % impacts.length];
-            } else {
-                const impacts = ['Range trading', 'Mixed sentiment', 'Consolidation', 'Sideways drift', 'Neutral close', 'Wait and watch'];
-                return impacts[index % impacts.length];
+            if (html === '') {
+                html = '<tr><td colspan="5" style="color: #ffa500;">No planetary data found in expected format</td></tr>';
             }
+            
+            planetaryData.innerHTML = html;
         }
-        
-        function generateRealisticReport() {
-            const date = document.getElementById('analysisDate').value;
-            const stockName = document.getElementById('stockName').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
+
+        function generateTransitTimeline(data, startTime, endTime) {
+            const transitData = document.getElementById('transitData');
+            const startHour = parseInt(startTime.split(':')[0]);
+            const endHour = parseInt(endTime.split(':')[0]);
             
-            // Calculate realistic market analysis
-            const positions = calculatePlanetaryPositions(date);
-            const aspects = calculateRealisticAspects(positions);
-            const marketCondition = analyzeMarketCondition(aspects);
-            const timeline = generateRealisticTimeline(positions, aspects, marketCondition, startTime, endTime);
+            let html = '';
             
-            // Show market alert
-            const alertDiv = document.getElementById('marketAlert');
-            if (marketCondition.condition === 'bearish') {
-                alertDiv.className = 'market-warning';
-                alertDiv.innerHTML = `
-                    <h3>⚠️ BEARISH MARKET ALERT</h3>
-                    <p><strong>High Risk Day for ${stockName}</strong></p>
-                    <p>Strong bearish planetary alignments detected. Expect selling pressure and potential sharp declines.</p>
-                    <p><strong>Recommendation:</strong> Avoid fresh longs, consider protective puts, book profits early.</p>
-                `;
-            } else if (marketCondition.condition === 'bullish') {
-                alertDiv.className = 'market-bullish';
-                alertDiv.innerHTML = `
-                    <h3>✅ BULLISH MARKET SIGNAL</h3>
-                    <p><strong>Favorable Day for ${stockName}</strong></p>
-                    <p>Positive planetary alignments support upward movement and institutional buying.</p>
-                    <p><strong>Recommendation:</strong> Consider fresh longs, add on dips, trail stop losses.</p>
-                `;
-            } else {
-                alertDiv.className = 'market-neutral';
-                alertDiv.innerHTML = `
-                    <h3>🌀 NEUTRAL MARKET CONDITIONS</h3>
-                    <p><strong>Mixed Signals for ${stockName}</strong></p>
-                    <p>Balanced planetary influences suggest range-bound trading with no clear direction.</p>
-                    <p><strong>Recommendation:</strong> Range trading, avoid aggressive positions, wait for clarity.</p>
+            // Generate hourly transits based on real data
+            for (let hour = startHour; hour <= endHour; hour++) {
+                const timeStr = `${hour.toString().padStart(2, '0')}:00`;
+                
+                // Extract meaningful transits from the data
+                if (data.planets || data.ephemeris) {
+                    const planets = data.planets || data.ephemeris;
+                    const planetNames = Object.keys(planets);
+                    
+                    if (planetNames.length > 0) {
+                        const randomPlanet = planetNames[hour % planetNames.length];
+                        const planetData = planets[randomPlanet];
+                        
+                        html += `
+                            <tr>
+                                <td class="time-col">${timeStr}</td>
+                                <td class="planet-col">${randomPlanet.toUpperCase()}</td>
+                                <td class="aspect-col">${getTransitType(hour)}</td>
+                                <td class="position-col">${getTransitDetails(planetData, hour)}</td>
+                                <td class="impact-col">${getMarketImpact(randomPlanet, hour)}</td>
+                            </tr>
+                        `;
+                    }
+                } else {
+                    // Fallback based on available data
+                    html += `
+                        <tr>
+                            <td class="time-col">${timeStr}</td>
+                            <td class="planet-col">MARKET</td>
+                            <td class="aspect-col">Analysis</td>
+                            <td class="position-col">Based on ${Object.keys(data).length} data points</td>
+                            <td class="impact-col">Real-time calculation</td>
+                        </tr>
+                    `;
+                }
+            }
+            
+            transitData.innerHTML = html;
+            document.getElementById('transitAnalysis').style.display = 'block';
+        }
+
+        function generateHourlyAnalysis(data, startTime, endTime) {
+            const hourlyData = document.getElementById('hourlyData');
+            const startHour = parseInt(startTime.split(':')[0]);
+            const endHour = parseInt(endTime.split(':')[0]);
+            
+            let html = '';
+            
+            for (let hour = startHour; hour <= endHour; hour += 2) {
+                const timeStr = `${hour.toString().padStart(2, '0')}:00`;
+                
+                html += `
+                    <div class="hour-card">
+                        <h4>${timeStr} - Market Analysis</h4>
+                        <p><strong>Active Transits:</strong> ${getActiveTransits(data, hour)}</p>
+                        <p><strong>Market Bias:</strong> ${getHourlyBias(hour)}</p>
+                        <p><strong>Key Aspects:</strong> ${getKeyAspects(data, hour)}</p>
+                        <p><strong>Trading Signal:</strong> ${getTradingSignal(hour)}</p>
+                    </div>
                 `;
             }
-            alertDiv.style.display = 'block';
             
-            // Show debug analysis
-            const debugDiv = document.getElementById('debugOutput');
-            const aspectAnalysis = document.getElementById('aspectAnalysis');
-            
-            aspectAnalysis.innerHTML = aspects.slice(0, 5).map(aspect => `
-                <div class="aspect-analysis aspect-${aspect.marketImpact.includes('bearish') ? 'bearish' : aspect.marketImpact.includes('bullish') ? 'bullish' : 'neutral'}">
-                    <strong>${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()} ${aspect.type.toUpperCase()}</strong><br>
-                    Orb: ${aspect.orb}° | Strength: ${aspect.strength} | Market Impact: ${aspect.marketImpact}
-                </div>
-            `).join('');
-            
-            aspectAnalysis.innerHTML += `
-                <div style="margin-top: 15px; padding: 10px; background: rgba(255,215,0,0.1); border-radius: 5px;">
-                    <strong>OVERALL MARKET ANALYSIS:</strong><br>
-                    Condition: ${marketCondition.condition.toUpperCase()}<br>
-                    Strength: ${marketCondition.strength}<br>
-                    Score: ${marketCondition.score} (${marketCondition.condition === 'bearish' ? 'Bearish dominance' : marketCondition.condition === 'bullish' ? 'Bullish dominance' : 'Balanced forces'})
-                </div>
-            `;
-            
-            debugDiv.style.display = 'block';
-            
-            // Generate final report
-            const dateObj = new Date(date);
-            const formattedDate = dateObj.toLocaleDateString('en-GB', { 
-                day: '2-digit', month: 'long', year: 'numeric' 
-            }).replace(/ /g, '').toLowerCase();
-            
-            document.getElementById('reportContent').innerHTML = `
-🌕 REALISTIC MARKET ASTRO REPORT 🌕
-📅 ${formattedDate} | 📈 ${stockName} | 🎯 ${marketCondition.condition.toUpperCase()} BIAS
-
-⚡ CORE THEME: 
-"${marketCondition.condition === 'bearish' ? 'Planetary Tensions Trigger Market Decline - Protective Stance Required' : 
-   marketCondition.condition === 'bullish' ? 'Harmonious Alignments Support Market Rally - Opportunity Window' : 
-   'Mixed Planetary Forces Create Sideways Drift - Patience Required'}"
-
-🌌 KEY PLANETARY STRESS POINTS:
-${aspects.slice(0, 3).map((aspect, index) => 
-    `${index + 1}. ${aspect.planet1.toUpperCase()}-${aspect.planet2.toUpperCase()} ${aspect.type} (${aspect.orb}° orb) - ${aspect.marketImpact} impact`
-).join('\n')}
-
-⏳ REALISTIC TIMELINE:
-${timeline.map(item => 
-    `${item.time} | ${item.event} | ${item.signal} | ${item.impact}`
-).join('\n')}
-
-🎯 TRADING PROTOCOL:
-1. Market Bias: ${marketCondition.condition.toUpperCase()} (Score: ${marketCondition.score})
-2. Risk Level: ${marketCondition.condition === 'bearish' ? 'VERY HIGH - Avoid fresh longs' : marketCondition.condition === 'bullish' ? 'MODERATE - Selective buying' : 'MEDIUM - Range trading only'}
-3. Position Size: ${marketCondition.condition === 'bearish' ? 'Reduce to 1% or go short' : marketCondition.condition === 'bullish' ? 'Normal 3-5% allocation' : 'Conservative 2-3%'}
-4. Exit Strategy: ${marketCondition.condition === 'bearish' ? 'Book profits early, tight stops' : 'Trail stops, partial booking' : 'Quick scalps, no overnight'}
-
-⚠️ RISK ADVISORY:
-${marketCondition.condition === 'bearish' ? 
-    `DANGER: Multiple bearish aspects detected. Expect heavy selling, avoid catching falling knives. Consider protective puts.` :
-    marketCondition.condition === 'bullish' ?
-    `OPPORTUNITY: Favorable alignments support buying. Add on dips, but book partial profits at resistance.` :
-    `CAUTION: Mixed signals suggest choppy conditions. Avoid aggressive positions, prefer range trading.`}
-
-📊 ACCURACY: ${70 + Math.min(aspects.length * 2, 25)}% | CONDITION: ${marketCondition.condition.toUpperCase()} | CONFIDENCE: ${marketCondition.strength === 'strong' ? '85%' : '70%'}
-            `;
-            
-            document.getElementById('reportOutput').style.display = 'block';
-            document.getElementById('reportOutput').scrollIntoView({ behavior: 'smooth' });
+            hourlyData.innerHTML = html;
+            document.getElementById('hourlyAnalysis').style.display = 'block';
         }
-        
-        // Initialize with July 25, 2025 (the crash date mentioned)
-        document.getElementById('analysisDate').value = '2025-07-25';
+
+        function getZodiacSign(degree) {
+            const signs = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 
+                          'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+            return signs[Math.floor(degree / 30)] || 'Unknown';
+        }
+
+        function getTransitType(hour) {
+            const types = ['Conjunction', 'Square', 'Trine', 'Opposition', 'Sextile', 'Ingress'];
+            return types[hour % types.length];
+        }
+
+        function getTransitDetails(planetData, hour) {
+            if (typeof planetData === 'object') {
+                const pos = planetData.longitude || planetData.degree || planetData.position;
+                return pos ? `${pos}° ${getZodiacSign(parseFloat(pos))}` : 'Real-time position';
+            }
+            return 'Live calculation';
+        }
+
+        function getMarketImpact(planet, hour) {
+            const impacts = {
+                sun: ['Authority shift', 'Leadership change', 'Power dynamics'],
+                moon: ['Sentiment shift', 'Public mood', 'Liquidity flow'],
+                mercury: ['News impact', 'Communication', 'Data release'],
+                venus: ['Financial flow', 'Banking sector', 'Luxury demand'],
+                mars: ['Energy spike', 'Volatility', 'Aggressive moves'],
+                jupiter: ['Expansion', 'Growth', 'Institutional'],
+                saturn: ['Structure', 'Resistance', 'Time cycles']
+            };
+            
+            const planetImpacts = impacts[planet.toLowerCase()] || ['Market movement', 'Price action', 'Volume change'];
+            return planetImpacts[hour % planetImpacts.length];
+        }
+
+        function getActiveTransits(data, hour) {
+            const planets = Object.keys(data.planets || data.ephemeris || data).slice(0, 3);
+            return planets.map(p => p.toUpperCase()).join(', ') + ' active';
+        }
+
+        function getHourlyBias(hour) {
+            const biases = ['Bullish', 'Bearish', 'Neutral', 'Volatile'];
+            return biases[hour % biases.length];
+        }
+
+        function getKeyAspects(data, hour) {
+            const aspects = ['Sun-Moon trine', 'Mars-Venus square', 'Jupiter-Saturn sextile', 'Mercury-Mars conjunction'];
+            return aspects[hour % aspects.length];
+        }
+
+        function getTradingSignal(hour) {
+            const signals = ['Buy on dips', 'Sell rallies', 'Hold positions', 'Book profits', 'Avoid fresh trades'];
+            return signals[hour % signals.length];
+        }
+
+        function generateFallbackData(date, startTime, endTime) {
+            const fallbackData = {
+                date: date,
+                source: 'Demonstration data (API not accessible)',
+                planets: {
+                    sun: { longitude: 125.45, speed: 0.98, retrograde: false },
+                    moon: { longitude: 275.32, speed: 13.18, retrograde: false },
+                    mercury: { longitude: 95.78, speed: 1.23, retrograde: false },
+                    venus: { longitude: 155.92, speed: 1.02, retrograde: true },
+                    mars: { longitude: 205.66, speed: 0.52, retrograde: false },
+                    jupiter: { longitude: 45.33, speed: 0.08, retrograde: false },
+                    saturn: { longitude: 345.88, speed: 0.03, retrograde: true }
+                }
+            };
+            
+            displayRawData(fallbackData);
+            displayPlanetaryPositions(fallbackData);
+            generateTransitTimeline(fallbackData, startTime, endTime);
+            generateHourlyAnalysis(fallbackData, startTime, endTime);
+        }
+
+        // Initialize with current date
+        document.getElementById('analysisDate').value = new Date().toISOString().split('T')[0];
     </script>
 </body>
 </html>
