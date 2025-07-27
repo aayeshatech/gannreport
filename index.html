@@ -1,11 +1,3 @@
-# 🚀 ULTRA SIMPLE SOLUTION - 5 Minutes Max
-
-## Option 1: Single HTML File (No Flask, No Errors)
-
-**Create a simple HTML file that works immediately:**
-
-### Step 1: Files Tab → Create new file called `index.html`
-```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +29,7 @@
             text-align: left;
             border: 2px solid #ffd700;
             font-family: monospace;
+            white-space: pre-line;
         }
         .date-input { margin: 20px 0; }
         input, button {
@@ -97,8 +90,7 @@
                 'Sunday': 'Sun Conjunction Triggers Leadership Move - Rahu Amplifies'
             };
             
-            const report = `
-📅 (${formattedDate}) | 🕒 UTC Timeline
+            const report = `📅 (${formattedDate}) | 🕒 UTC Timeline
 ⚡ CORE THEME: 
 "${themes[dayName] || themes['Monday']}"
 
@@ -120,8 +112,7 @@
 4. Hold through Moon-Mars (20:50)
 
 ⚠️ RISK ADVISORY:
-Moon-Saturn (08:18) may trigger stop hunts
-            `;
+Moon-Saturn (08:18) may trigger stop hunts`;
             
             document.getElementById('reportContent').innerText = report;
             document.getElementById('reportOutput').style.display = 'block';
@@ -129,52 +120,3 @@ Moon-Saturn (08:18) may trigger stop hunts
     </script>
 </body>
 </html>
-```
-
-### Step 2: Set as Static File
-1. **Files tab** → Upload this HTML file
-2. **Web tab** → **Static files** section
-3. **Add:** URL: `/` → Directory: `/home/aayeshatech/index.html`
-4. **Reload**
-
----
-
-## Option 2: Use Different Platform (5 Minutes)
-
-### Use Replit (Always Works):
-1. **Go to:** https://replit.com
-2. **Create account** (free)
-3. **Create new Python Flask project**
-4. **Replace main.py with simple Flask code**
-5. **Click Run** → **Instant working website**
-
-### Use GitHub Pages (HTML Only):
-1. **Go to:** https://github.com
-2. **Create new repository** called `gann-reports`
-3. **Upload the HTML file above**
-4. **Settings** → **Pages** → **Enable**
-5. **Get instant website:** `yourusername.github.io/gann-reports`
-
----
-
-## Option 3: Minimal Flask (Last Try)
-
-**Replace your flask_app.py with this ONE ROUTE:**
-
-```python
-from flask import Flask
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return """
-    <h1 style='color: gold; text-align: center; padding: 50px; background: #1e3c72; margin: 0; font-family: Arial;'>
-    🌕 GANN ASTRO REPORTS 🌕<br>
-    <span style='font-size: 0.6em; color: white;'>System Online - Ready for Analysis</span>
-    </h1>
-    """
-```
-
-**Save → Reload → Should work instantly**
-
----
